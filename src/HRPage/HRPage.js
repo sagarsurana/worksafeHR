@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import './HRPage.css';
 import Header from '../Header/header.js'
+import Report from '../Report/report.js';
+import { Route, Switch, Link, Redirect, NavLink } from 'react-router-dom';
 
 export default class HRPage extends Component {
     render() {
         return (
             <div>
+                <Switch>
+                    <Route path="/report-page" component={Report}></Route>
+                </Switch>
                 <Header></Header>
                 <ReportTable></ReportTable>
                 <ValidatedTable></ValidatedTable>
@@ -15,12 +20,23 @@ export default class HRPage extends Component {
 }
 
 class ReportTable extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            shouldRedirect: false
+        };
+    }
+
+    handleClick() {
+        this.setState({shouldRedirect: true});
+    };
+
     render() {
         let rows = [];
         for (var i = 1; i < 11; i++) {
             var rowid = "row" + i
             rows.push(
-                <button key={rowid}>
+                <button key={rowid} onClick={() => this.handleClick()}> 
                     <div className="rows">
                         <div className="content">
                             <div className="head">
@@ -33,6 +49,9 @@ class ReportTable extends Component {
                     </div>
                 </button>
             )
+            if (this.state.shouldRedirect) {
+                return <Redirect push to={'/report-page'} />
+            }
         }
         return (
             <div id="table1">
@@ -43,12 +62,23 @@ class ReportTable extends Component {
 }
 
 class ValidatedTable extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            shouldRedirect: false
+        };
+    }
+
+    handleClick() {
+        this.setState({shouldRedirect: true});
+    };
+
     render() {
         let rows = [];
         for (var i = 1; i < 11; i++) {
             var rowid = "row" + i
             rows.push(
-                <button key={rowid}>
+                <button key={rowid} onClick={() => this.handleClick()}>
                     <div className="rows">
                         <div className="content">
                             <div className="head">
@@ -61,6 +91,9 @@ class ValidatedTable extends Component {
                     </div>
                 </button>
             )
+            if (this.state.shouldRedirect) {
+                return <Redirect push to={'/report-page'} />
+            }
         }
         return (
             <div id="table2">
