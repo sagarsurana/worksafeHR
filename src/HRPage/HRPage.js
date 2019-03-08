@@ -24,7 +24,8 @@ class ReportTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            shouldRedirect: false
+            shouldRedirect: false,
+            rows: []
         };
         this.firebase = new FirebaseService();
     }
@@ -33,37 +34,50 @@ class ReportTable extends Component {
         this.setState({shouldRedirect: true});
     };
 
-    render() {
+    componentDidMount() {
+        this.createRows();
+    }
+
+    handleData(currentRows) {
+        this.setState({rows: currentRows});
+    }
+
+    createRows() {
+        let currentRows = []
         let statuses = ["Awaiting Review", "Validated", "Mediation", "Formal Consequences", "Final Investigative Report Submitted"];
-        let rows = [];
-        for(var j = 0; j < statuses.length; j++) {
-            let data = this.firebase.getByStatus(statuses[j]);
-            console.log(data.length);
-            for (var i = 0; i < data.length; i++) {
-                // console.log(data[i]);
-                var rowid = "row" + i
-                rows.push(
-                    <button key={rowid} onClick={() => this.handleClick()}> 
-                        <div className="rows">
-                            <div className="content">
-                                <div className="head">
-                                    <h2> Report Name </h2>
-                                    <p className="status"> Awaiting Response </p>
+        for (var j = 0; j < statuses.length; j++) {
+            this.firebase.getByStatus(statuses[j]).then(
+                snap => {
+                    for (var i = 0; i < snap.length; i++) {
+                        var rowid = "t1row" + snap[i].datetime + i;
+                        currentRows.push(
+                            <button key={rowid} onClick={() => this.handleClick()}>
+                                <div className="rows">
+                                    <div className="content">
+                                        <div className="head">
+                                            <h2> {snap[i].name} </h2>
+                                            <p className={snap[i].status.replace(/\s+/g, '')}> {snap[i].status} </p>
+                                        </div>
+                                            <p className="date"> {snap[i].datetime} </p>
+                                            <p className="type"> {snap[i].type} </p>
+                                    </div>
                                 </div>
-                                    <p className="date"> 02/22/19 </p>
-                                    <p className="reporters"> Sagar Surana </p>
-                            </div>
-                        </div>
-                    </button>
-                )
-                if (this.state.shouldRedirect) {
-                    return <Redirect push to={'/report-page'} />
+                            </button>
+                        )
+                        if (this.state.shouldRedirect) {
+                            return <Redirect push to={'/report-page'} />
+                        }
+                    }
+                    this.handleData(currentRows);
                 }
-            }
+            )
         }
+    }
+
+    render() {
         return (
             <div id="table1">
-                {rows}
+                {this.state.rows}
             </div>
         );
     }
@@ -73,43 +87,57 @@ class ResolvedTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            shouldRedirect: false
+            shouldRedirect: false,
+            rows: []
         };
         this.firebase = new FirebaseService();
+    }
+
+    componentDidMount() {
+        this.createRows();
     }
 
     handleClick() {
         this.setState({shouldRedirect: true});
     };
 
-    render() {
-        let rows = [];
-        let resData = this.firebase.getByStatus("Resolved");
-        console.log(resData);
-        console.log(resData.length);
-        for (var i = 0; i < 11; i++) {
-            var rowid = "row" + i
-            rows.push(
-                <button key={rowid} onClick={() => this.handleClick()}>
-                    <div className="rows">
-                        <div className="content">
-                            <div className="head">
-                                <h2> Sagar Surana </h2>
-                                <p className="status2"> Resolved </p>
+    handleData(currentRows) {
+        this.setState({rows: currentRows});
+    }
+
+    createRows() {
+        let currentRows = []
+        this.firebase.getByStatus("Resolved").then(
+            snap => {
+                for (var i = 0; i < snap.length; i++) {
+                    var rowid = "t2row" + i;
+                    currentRows.push(
+                        <button key={rowid} onClick={() => this.handleClick()}>
+                            <div className="rows">
+                                <div className="content">
+                                    <div className="head">
+                                        <h2> {snap[i].name} </h2>
+                                        <p className={snap[i].status.replace(/\s+/g, '')}> {snap[i].status} </p>
+                                    </div>
+                                        <p className="date"> {snap[i].datetime} </p>
+                                        <p className="type"> {snap[i].type} </p>
+                                </div>
                             </div>
-                                <p className="date"> 02/22/19 </p>
-                                <p className="validators"> Sagar Surana </p>
-                        </div>
-                    </div>
-                </button>
-            )
-            if (this.state.shouldRedirect) {
-                return <Redirect push to={'/report-page'} />
+                        </button>
+                    )
+                    if (this.state.shouldRedirect) {
+                        return <Redirect push to={'/report-page'} />
+                    }
+                }
+                this.handleData(currentRows);
             }
-        }
+        )
+    }
+
+    render() {
         return (
             <div id="table2">
-                {rows}
+                {this.state.rows}
             </div>
         );
     }
