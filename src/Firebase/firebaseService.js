@@ -35,8 +35,4 @@ export default class FirebaseService {
             }
         );
     }
-
-    changeStatus(id) {
-        
-    }
 }

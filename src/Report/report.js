@@ -35,24 +35,27 @@ class Form extends Component {
                     <div>
                         <select>
                             <option selected="selected" value="validated">Validated</option>
-                            <option value="tbd">TBD</option>
+                            <option value="tbd">Awaiting Response</option>
+                            <option value="validated">Mediation</option>
+                            <option value="tbd">Formal Consequences</option>
+
                         </select>
                     </div>
                 </div>
                 <div className="reponse"> Name:
-                    <p> response </p>
+                    <p> Test User </p>
                 </div>
                 <div className="reponse"> <p> Date: </p>
-                    <p> response </p>
+                    <p> Date </p>
                 </div>
                 <div className="reponse"> Type: 
-                    <p> response </p>
+                    <p> Type </p>
                 </div>
                 <div className="reponse"> Description:
-                    <p> response </p>
+                    <p> Description </p>
                 </div>
                 <div className="reponse"> Your Response:
-                    <p> response </p>
+                    <p> Current Status </p>
                 </div>
             </div>
         );
