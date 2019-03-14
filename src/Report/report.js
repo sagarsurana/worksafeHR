@@ -38,6 +38,7 @@ class Form extends Component {
                             <option value="tbd">Awaiting Response</option>
                             <option value="validated">Mediation</option>
                             <option value="tbd">Formal Consequences</option>
+                            <option value="final">Final Investigative Report Submitted</option>
 
                         </select>
                     </div>
